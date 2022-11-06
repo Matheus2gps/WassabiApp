@@ -11,17 +11,17 @@ import java.util.List;
 public final class WassabiDAO extends AcessoBD{
 
 	/********************************************************/
-	public static List<CategoriaPedido> consultarTodasCategorias() throws SQLException
+	public static List<String> consultarTodasCategorias() throws SQLException
 	/********************************************************/
 	{
 		String sql = "select * from categoria";
 		Statement statement = conexao.createStatement();
 		ResultSet rs = statement.executeQuery(sql);
-		List<CategoriaPedido> categoria = new LinkedList<>();
+		List<String> categoria = new LinkedList<>();
 		while(rs.next()) {   
 			//System.out.println(rs.getInt(1)+"<=>"+rs.getString(2));
-			CategoriaPedido cat = new CategoriaPedido(rs.getInt(1),rs.getString(2));
-			categoria.add(cat);
+			
+			categoria.add(rs.getString(2));
 		}
 		return categoria;
 	}
@@ -59,6 +59,21 @@ public final class WassabiDAO extends AcessoBD{
 			cliente.add(clie_);
 		}
 		return cliente;
+	}
+	
+	public static List<Produtos> ConsultarProdutosPorCategoria(int categoria) throws SQLException
+	/********************************************************/
+	{
+		String sql = "select * from produtos where categoria ="+categoria;
+		Statement statement = conexao.createStatement();
+		ResultSet rs = statement.executeQuery(sql);
+		List<Produtos> produto = new LinkedList<>();
+		while(rs.next()) {   
+			System.out.println(rs.getInt(1)+"<=>"+rs.getString(2));
+			Produtos prod = new Produtos(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4));
+			produto.add(prod);
+		}
+		return produto;
 	}
 	
 	
