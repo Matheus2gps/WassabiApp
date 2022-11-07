@@ -40,7 +40,7 @@ public final class WassabiDAO extends AcessoBD{
 	public static void inserirVendaItens(List<Vendas> venda) throws SQLException{
 	/*****************************************************************/	
 		for (Vendas vendas : venda) {
-			String sql = "insert into vendas_itens (idVenda,idCliente,idProduto,produto,quantidade,valor_produto,valor_total)  values ("+vendas.idVenda()+",1,"+vendas.idProduto()+",'"+vendas.produto()+"',"+vendas.quantidade()+","
+			String sql = "insert into vendas_itens (idVenda,idCliente,cliente,idProduto,produto,quantidade,valor_produto,valor_total)  values ("+vendas.idVenda()+",1,'"+vendas.cliente()+"',"+vendas.idProduto()+",'"+vendas.produto()+"',"+vendas.quantidade()+","
 					+vendas.valor_produto()+","+vendas.valor_total()+")";
 						Statement statement = conexao.createStatement();
 						statement.execute(sql);

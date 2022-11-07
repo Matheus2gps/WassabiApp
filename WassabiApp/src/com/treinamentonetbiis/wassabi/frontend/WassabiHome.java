@@ -205,7 +205,7 @@ public class WassabiHome extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					valor_global += CalculaNovoValor(quantidade_selecionada, valor_selecionado);	
-					Vendas venda_ = new Vendas(Integer.parseInt(txt_venda_global.getText()),1, produtos_selecionados.get(tabela_produtos.getSelectedRow()).idProdutos(), produtos_selecionados.get(tabela_produtos.getSelectedRow()).nome(), Integer.parseInt(txt_quantidade_pop_prod.getText()), produtos_selecionados.get(tabela_produtos.getSelectedRow()).valor(),CalculaNovoValor(quantidade_selecionada, valor_selecionado));
+					Vendas venda_ = new Vendas(Integer.parseInt(txt_venda_global.getText()),1, txt_cliente_global.getText(),produtos_selecionados.get(tabela_produtos.getSelectedRow()).idProdutos(), produtos_selecionados.get(tabela_produtos.getSelectedRow()).nome(), Integer.parseInt(txt_quantidade_pop_prod.getText()), produtos_selecionados.get(tabela_produtos.getSelectedRow()).valor(),CalculaNovoValor(quantidade_selecionada, valor_selecionado));
 					venda_atual.add(venda_);
 					AtualizaValorGlobal(txt_valor_global);
 				} catch (Exception e2) {
@@ -297,6 +297,9 @@ public class WassabiHome extends JFrame {
 							WassabiDAO.inserirVendaItens(venda_atual);
 							WassabiDAO.inserirVenda(Integer.parseInt(txt_venda_global.getText()), valor_global);
 							JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
+							venda_atual.clear();
+							NormalizarVenda(txt_valor_global,txt_venda_global);
+							
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -804,6 +807,13 @@ public class WassabiHome extends JFrame {
 	
 	public void normalizar(JPanel jp1,JPanel jp2) {
 		jp1.setVisible(false);
+		
+	}
+	
+	public void NormalizarVenda(JLabel txt_valor_global,JLabel txt_venda_global) throws SQLException {
+		txt_valor_global.setText("0");
+		txt_venda_global.setText(String.valueOf(WassabiDAO.IdUltimaVenda()));
+		valor_global = 0d;
 		
 	}
 	
