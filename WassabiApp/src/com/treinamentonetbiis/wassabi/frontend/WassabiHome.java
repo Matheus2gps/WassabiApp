@@ -663,6 +663,8 @@ public class WassabiHome extends JFrame {
 						txt_descricao_pop_prod.setText("");
 						popup_add_produto.setVisible(false);
 						btn_carrinho_compra.setVisible(true);
+						btn_finalizar_venda.setVisible(true);
+						btn_cancelar_venda.setVisible(true);
 						tabela_produtos.setVisible(true);
 					}
 				});
@@ -674,7 +676,8 @@ public class WassabiHome extends JFrame {
 						popup_add_produto.setVisible(true);
 						tabela_produtos.setVisible(false);
 						btn_carrinho_compra.setVisible(false);
-						
+						btn_finalizar_venda.setVisible(false);
+						btn_cancelar_venda.setVisible(false);
 						//atribuindo valores as variaveis do produto selecionado
 						valor_selecionado = produtos_selecionados.get(tabela_produtos.getSelectedRow()).valor();
 						quantidade_selecionada = 1;
