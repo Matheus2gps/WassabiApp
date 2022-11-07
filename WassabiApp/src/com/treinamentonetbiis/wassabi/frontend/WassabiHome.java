@@ -203,8 +203,14 @@ public class WassabiHome extends JFrame {
 		//Evento quando o botao de confirmacao para adicionar produto no pedido e acionado
 		btn_ok_pop_prod.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				try {
+					valor_global += CalculaNovoValor(quantidade_selecionada, valor_selecionado);	
+					Vendas venda_ = new Vendas(Integer.parseInt(txt_venda_global.getText()),1, produtos_selecionados.get(tabela_produtos.getSelectedRow()).idProdutos(), produtos_selecionados.get(tabela_produtos.getSelectedRow()).nome(), Integer.parseInt(txt_quantidade_pop_prod.getText()), produtos_selecionados.get(tabela_produtos.getSelectedRow()).valor(),CalculaNovoValor(quantidade_selecionada, valor_selecionado));
+					venda_atual.add(venda_);
+					AtualizaValorGlobal(txt_valor_global);
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, e2.getMessage());
+				}				
 			}
 		});
 		
@@ -269,6 +275,8 @@ public class WassabiHome extends JFrame {
 		btn_carrinho_compra.setIcon(new ImageIcon("C:\\Git\\WassabiApp\\Icones\\shopping-cart.png"));
 		btn_carrinho_compra.setBackground(new Color(255, 255, 255));
 		
+		
+		
 		JButton btn_finalizar_venda = new JButton("Finalizar Venda");
 		btn_finalizar_venda.setBounds(294, 224, 122, 28);
 		lista_produtos.add(btn_finalizar_venda);
@@ -281,6 +289,21 @@ public class WassabiHome extends JFrame {
 		btn_cancelar_venda.setBounds(10, 224, 130, 28);
 		lista_produtos.add(btn_cancelar_venda);
 		
+		
+		//Evento ao finalizar venda
+				btn_finalizar_venda.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try {
+							WassabiDAO.inserirVendaItens(venda_atual);
+							WassabiDAO.inserirVenda(Integer.parseInt(txt_venda_global.getText()), valor_global);
+							JOptionPane.showMessageDialog(null, "Venda finalizada com sucesso!");
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+						}
+					}
+		});
+				
 		//*********
 		
 		
@@ -641,7 +664,7 @@ public class WassabiHome extends JFrame {
 					}
 				});
 				
-				//Evento quanto a tabela de produtos é clicada
+				//Evento quando a tabela de produtos é clicada
 				tabela_produtos.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {			
@@ -682,7 +705,7 @@ public class WassabiHome extends JFrame {
 	private Double valor_selecionado;
 	private int quantidade_selecionada;
 	
-	
+	List<Vendas> venda_atual = new LinkedList<>();
 	List<String> lista_de_categorias;
 	int index_categoria = 0;
 	private JTextField txt_quantidade_pop_prod;
@@ -782,6 +805,12 @@ public class WassabiHome extends JFrame {
 	public void normalizar(JPanel jp1,JPanel jp2) {
 		jp1.setVisible(false);
 		
+	}
+	
+	private Double valor_global = 0d;
+	
+	public void AtualizaValorGlobal(JLabel txt_valor_global) {
+		txt_valor_global.setText(casasdecimais2.format(valor_global).toString().replace(".",","));
 	}
 	
 	public void normalizarInicial(JPanel jp_pop_produtos,JLabel txt_date_global,JLabel txt_venda_global) throws HeadlessException, SQLException {

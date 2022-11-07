@@ -37,6 +37,27 @@ public final class WassabiDAO extends AcessoBD{
 	}
 	
 	/*****************************************************************/
+	public static void inserirVendaItens(List<Vendas> venda) throws SQLException{
+	/*****************************************************************/	
+		for (Vendas vendas : venda) {
+			String sql = "insert into vendas_itens (idVenda,idCliente,idProduto,produto,quantidade,valor_produto,valor_total)  values ("+vendas.idVenda()+",1,"+vendas.idProduto()+",'"+vendas.produto()+"',"+vendas.quantidade()+","
+					+vendas.valor_produto()+","+vendas.valor_total()+")";
+						Statement statement = conexao.createStatement();
+						statement.execute(sql);
+						conexao.commit();
+		}
+		
+	}
+	
+	public static void inserirVenda(int idVenda, double ValorTotal) throws SQLException{
+		/*****************************************************************/	
+			String sql = "insert into vendas (idVenda,valor_total) values ("+idVenda+","+ValorTotal+")";
+			Statement statement = conexao.createStatement();
+			statement.execute(sql);
+			conexao.commit();
+		}
+	
+	/*****************************************************************/
 	public static void inserirClientes(Clientes clientes) throws SQLException{
 	/*****************************************************************/	
 		String sql = "insert into cliente (nome,cpf,telefone,endereco) values ('"+clientes.nome()+"','"+clientes.cpf()+"','"
@@ -54,7 +75,7 @@ public final class WassabiDAO extends AcessoBD{
 		ResultSet rs = statement.executeQuery(sql);
 		List<Clientes> cliente = new LinkedList<>();
 		while(rs.next()) {   
-			System.out.println(rs.getInt(1)+"<=>"+rs.getString(2));
+			//System.out.println(rs.getInt(1)+"<=>"+rs.getString(2));
 			Clientes clie_ = new Clientes(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4));
 			cliente.add(clie_);
 		}
@@ -69,7 +90,7 @@ public final class WassabiDAO extends AcessoBD{
 		ResultSet rs = statement.executeQuery(sql);
 		List<Produtos> produto = new LinkedList<>();
 		while(rs.next()) {   
-			System.out.println(rs.getInt(1)+"<=>"+rs.getString(2));
+			//System.out.println(rs.getInt(1)+"<=>"+rs.getString(2));
 			Produtos prod = new Produtos(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4));
 			produto.add(prod);
 		}
