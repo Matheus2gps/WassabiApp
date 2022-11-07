@@ -16,6 +16,7 @@ import java.awt.Color;
 import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.FlowLayout;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -26,6 +27,9 @@ import javax.swing.JTable;
 import java.awt.Label;
 import java.awt.Panel;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,6 +59,12 @@ import javax.swing.JTextPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JScrollPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JLayeredPane;
+import java.awt.TextField;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.DropMode;
 
 public class WassabiHome extends JFrame {
 	private JTable tabela_produtos;
@@ -93,6 +103,162 @@ public class WassabiHome extends JFrame {
 		panel.add(pagina_inicial);
 		pagina_inicial.setLayout(null);
 		
+		JLabel txt_valor_view_global = new JLabel("Valor Atual: R$");
+		txt_valor_view_global.setHorizontalAlignment(SwingConstants.LEFT);
+		txt_valor_view_global.setFont(new Font("Arial", Font.BOLD, 12));
+		txt_valor_view_global.setBounds(6, 357, 93, 14);
+		pagina_inicial.add(txt_valor_view_global);
+		
+		JLabel txt_valor_global = new JLabel("0");
+		txt_valor_global.setHorizontalAlignment(SwingConstants.LEFT);
+		txt_valor_global.setFont(new Font("Arial", Font.PLAIN, 12));
+		txt_valor_global.setBounds(97, 357, 83, 14);
+		pagina_inicial.add(txt_valor_global);
+		
+		JLabel txt_venda_global = new JLabel("1");
+		txt_venda_global.setHorizontalAlignment(SwingConstants.LEFT);
+		txt_venda_global.setFont(new Font("Arial", Font.PLAIN, 12));
+		txt_venda_global.setBounds(655, 2, 74, 14);
+		pagina_inicial.add(txt_venda_global);
+		
+		JLabel txt_venda_view_global = new JLabel("Venda:");
+		txt_venda_view_global.setHorizontalAlignment(SwingConstants.LEFT);
+		txt_venda_view_global.setFont(new Font("Arial", Font.BOLD, 12));
+		txt_venda_view_global.setBounds(607, 2, 56, 14);
+		pagina_inicial.add(txt_venda_view_global);
+		
+		JLabel txt_cliente_global = new JLabel("Consumidor Final");
+		txt_cliente_global.setHorizontalAlignment(SwingConstants.LEFT);
+		txt_cliente_global.setFont(new Font("Arial", Font.PLAIN, 12));
+		txt_cliente_global.setBounds(56, 2, 201, 14);
+		pagina_inicial.add(txt_cliente_global);
+		
+		JLabel txt_cliente_view_global = new JLabel("Cliente:");
+		txt_cliente_view_global.setFont(new Font("Arial", Font.BOLD, 12));
+		txt_cliente_view_global.setHorizontalAlignment(SwingConstants.LEFT);
+		txt_cliente_view_global.setBounds(6, 2, 56, 14);
+		pagina_inicial.add(txt_cliente_view_global);
+		
+		JLabel txt_date_global = new JLabel("06/11/2022");
+		txt_date_global.setFont(new Font("Arial", Font.BOLD, 12));
+		txt_date_global.setHorizontalAlignment(SwingConstants.CENTER);
+		txt_date_global.setBounds(607, 357, 74, 14);
+		pagina_inicial.add(txt_date_global);
+		
+		
+		//*********** Cria o panel de adicionar Produtos ************
+		
+		JPanel popup_add_produto = new JPanel();
+		popup_add_produto.setBackground(new Color(239, 239, 239));
+		popup_add_produto.setBounds(205, 80, 311, 219);
+		pagina_inicial.add(popup_add_produto);
+		popup_add_produto.setLayout(null);
+		
+		Label lbl_x_pop_addprod = new Label("X");
+		
+		lbl_x_pop_addprod.setBounds(289, 4, 22, 23);
+		lbl_x_pop_addprod.setFont(new Font("Arial", Font.BOLD, 12));
+		lbl_x_pop_addprod.setAlignment(Label.CENTER);
+		popup_add_produto.add(lbl_x_pop_addprod);
+		
+		Label lbl_prod_name = new Label("Produto");
+		lbl_prod_name.setFont(new Font("Arial", Font.BOLD, 12));
+		lbl_prod_name.setAlignment(Label.CENTER);
+		lbl_prod_name.setBounds(28, 15, 213, 22);
+		popup_add_produto.add(lbl_prod_name);
+		
+		txt_quantidade_pop_prod = new JTextField();
+		
+		txt_quantidade_pop_prod.setFont(new Font("Arial", Font.BOLD, 11));
+		txt_quantidade_pop_prod.setHorizontalAlignment(SwingConstants.CENTER);
+		txt_quantidade_pop_prod.setText("1");
+		txt_quantidade_pop_prod.setBounds(10, 147, 62, 28);
+		popup_add_produto.add(txt_quantidade_pop_prod);
+		txt_quantidade_pop_prod.setColumns(10);
+		
+		JButton btn_add_quantidade = new JButton("");
+		
+		btn_add_quantidade.setIcon(new ImageIcon("C:\\Git\\WassabiApp\\Icones\\plus.png"));
+		btn_add_quantidade.setBounds(82, 133, 22, 23);
+		popup_add_produto.add(btn_add_quantidade);
+		
+		Label lbl_prod_name_1 = new Label("______________________________________");
+		lbl_prod_name_1.setFont(new Font("Arial", Font.BOLD, 12));
+		lbl_prod_name_1.setAlignment(Label.CENTER);
+		lbl_prod_name_1.setBounds(10, 23, 273, 22);
+		popup_add_produto.add(lbl_prod_name_1);
+		
+		Label lbl_valor_pop_prod = new Label("R$ 2000,00");
+		lbl_valor_pop_prod.setFont(new Font("Arial", Font.PLAIN, 14));
+		lbl_valor_pop_prod.setAlignment(Label.CENTER);
+		lbl_valor_pop_prod.setBounds(153, 142, 130, 33);
+		popup_add_produto.add(lbl_valor_pop_prod);
+		
+		JButton btn_ok_pop_prod = new JButton("Ok");
+		btn_ok_pop_prod.setBackground(new Color(174, 228, 255));
+		btn_ok_pop_prod.setFont(new Font("Arial", Font.BOLD, 11));
+		btn_ok_pop_prod.setBounds(212, 181, 71, 27);
+		popup_add_produto.add(btn_ok_pop_prod);
+		
+		//Evento quando o botao de confirmacao para adicionar produto no pedido e acionado
+		btn_ok_pop_prod.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
+		
+		JButton btn_remove_quantidade = new JButton("");
+		btn_remove_quantidade.setIcon(new ImageIcon("C:\\Git\\WassabiApp\\Icones\\minus.png"));
+		btn_remove_quantidade.setBounds(82, 168, 22, 23);
+		popup_add_produto.add(btn_remove_quantidade);
+		
+		//Evento para quando remover quantidade do produto
+		btn_remove_quantidade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (quantidade_selecionada > 1) {
+					quantidade_selecionada--;
+					txt_quantidade_pop_prod.setText(String.valueOf(quantidade_selecionada));
+					lbl_valor_pop_prod.setText("R$ "+casasdecimais2.format(CalculaNovoValor(quantidade_selecionada, valor_selecionado)).toString().replace(".", ","));
+				}		
+			}
+		});
+		
+		//Evento quando o botao de adicionar quantidade e acionado
+		btn_add_quantidade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			quantidade_selecionada++;
+			txt_quantidade_pop_prod.setText(String.valueOf(quantidade_selecionada));
+			lbl_valor_pop_prod.setText("R$ "+casasdecimais2.format(CalculaNovoValor(quantidade_selecionada, valor_selecionado)).toString().replace(".", ","));
+			}
+		});
+		
+		//Evento quando o enter no texto de quantidade e acionado
+		txt_quantidade_pop_prod.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == 10) {
+					try {
+						quantidade_selecionada = Integer.parseInt(txt_quantidade_pop_prod.getText());
+					} catch (Exception e2) {
+						JOptionPane.showMessageDialog(null, "Erro ao informar quantidade, apenas valores inteiros são aceitos");
+						quantidade_selecionada = 1;
+						txt_quantidade_pop_prod.setText(String.valueOf(quantidade_selecionada));
+						lbl_valor_pop_prod.setText("R$ "+casasdecimais2.format(CalculaNovoValor(quantidade_selecionada, valor_selecionado)).toString().replace(".", ","));
+						
+					}
+					
+					txt_quantidade_pop_prod.setText(String.valueOf(quantidade_selecionada));
+					lbl_valor_pop_prod.setText("R$ "+casasdecimais2.format(CalculaNovoValor(quantidade_selecionada, valor_selecionado)).toString().replace(".", ","));
+				}
+				
+			}
+		});
+		
+		//*********
+		
+		//*************** cria o painel de listar produtos *************
+		
 		JPanel lista_produtos = new JPanel();
 		lista_produtos.setBackground(new Color(255, 255, 255));
 		lista_produtos.setBounds(147, 42, 426, 290);
@@ -102,6 +268,21 @@ public class WassabiHome extends JFrame {
 		btn_carrinho_compra.setBounds(191, 224, 39, 32);
 		btn_carrinho_compra.setIcon(new ImageIcon("C:\\Git\\WassabiApp\\Icones\\shopping-cart.png"));
 		btn_carrinho_compra.setBackground(new Color(255, 255, 255));
+		
+		JButton btn_finalizar_venda = new JButton("Finalizar Venda");
+		btn_finalizar_venda.setBounds(294, 224, 122, 28);
+		lista_produtos.add(btn_finalizar_venda);
+		
+		JButton btn_cancelar_venda = new JButton("Cancelar Venda");
+		btn_cancelar_venda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_cancelar_venda.setBounds(10, 224, 130, 28);
+		lista_produtos.add(btn_cancelar_venda);
+		
+		//*********
+		
 		
 		JPanel insere_clientes = new JPanel();
 		insere_clientes.setLayout(null);
@@ -260,6 +441,7 @@ public class WassabiHome extends JFrame {
 		//normalizar
 		normalizar(insere_clientes, lista_produtos);
 		
+		
 		JButton btn_slide_right = new JButton("");
 		btn_slide_right.setBounds(377, 107, 39, 32);
 		
@@ -300,7 +482,7 @@ public class WassabiHome extends JFrame {
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Clientes");
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Pedidos");
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Vendas");
 		mnNewMenu.add(mntmNewMenuItem_2);
 		
 		JMenu mnNewMenu_1 = new JMenu("Cadastro");
@@ -314,7 +496,7 @@ public class WassabiHome extends JFrame {
 		
 		mnNewMenu_1.add(mntmNewMenuItem_4);
 		
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Pedidos");
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Categoria");
 		mnNewMenu_1.add(mntmNewMenuItem_5);
 		
 		JMenu mnNewMenu_2 = new JMenu("Ajustes");
@@ -404,15 +586,7 @@ public class WassabiHome extends JFrame {
 		tabela_produtos.setFont(new Font("Arial", Font.PLAIN, 16));
 		//tabela_produtos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
-		tabela_produtos.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			
-				JOptionPane.showMessageDialog(null, tabela_produtos.getValueAt(tabela_produtos.getSelectedRow(), 0));
-				
-			
-			}
-		});
+		
 		tabela_produtos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabela_produtos.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -434,6 +608,7 @@ public class WassabiHome extends JFrame {
 		
 		
 		
+		
 		//carrega produtos
 		try {
 			CarregaTabelaProdutos();
@@ -443,10 +618,74 @@ public class WassabiHome extends JFrame {
 			e1.printStackTrace();
 		}
 		
+		
+		
+		JTextArea txt_descricao_pop_prod = new JTextArea();
+		txt_descricao_pop_prod.setWrapStyleWord(true);
+		txt_descricao_pop_prod.setBackground(new Color(239, 239, 239));
+		txt_descricao_pop_prod.setLineWrap(true);
+		txt_descricao_pop_prod.setRows(4);
+		txt_descricao_pop_prod.setEditable(false);
+		txt_descricao_pop_prod.setBounds(10, 60, 273, 69);
+		popup_add_produto.add(txt_descricao_pop_prod);
+		
+		//Evento ao fechar o pop up de add produtos
+				lbl_x_pop_addprod.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						lbl_prod_name.setText("");
+						txt_descricao_pop_prod.setText("");
+						popup_add_produto.setVisible(false);
+						btn_carrinho_compra.setVisible(true);
+						tabela_produtos.setVisible(true);
+					}
+				});
+				
+				//Evento quanto a tabela de produtos é clicada
+				tabela_produtos.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {			
+						popup_add_produto.setVisible(true);
+						tabela_produtos.setVisible(false);
+						btn_carrinho_compra.setVisible(false);
+						
+						//atribuindo valores as variaveis do produto selecionado
+						valor_selecionado = produtos_selecionados.get(tabela_produtos.getSelectedRow()).valor();
+						quantidade_selecionada = 1;
+						
+						txt_quantidade_pop_prod.setText(String.valueOf(quantidade_selecionada));
+						lbl_prod_name.setText((String) tabela_produtos.getValueAt(tabela_produtos.getSelectedRow(), 0));
+						txt_descricao_pop_prod.setText(produtos_selecionados.get(tabela_produtos.getSelectedRow()).descricao());
+						lbl_valor_pop_prod.setText("R$ "+casasdecimais2.format(valor_selecionado).toString().replace(".", ","));
+						//JOptionPane.showMessageDialog(null, tabela_produtos.getValueAt(tabela_produtos.getSelectedRow(), 0));		
+					}
+				});
+				
+				
+				
+				//normalizar view inicial
+				try {
+					normalizarInicial(popup_add_produto,txt_date_global,txt_venda_global);
+				} catch (HeadlessException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
 	}
+	
+	private double CalculaNovoValor(int quantidade, Double valor) {		
+		return quantidade*valor;
+	}
+	
+	private static final DecimalFormat casasdecimais2 = new DecimalFormat("0.00");
+	private Double valor_selecionado;
+	private int quantidade_selecionada;
+	
 	
 	List<String> lista_de_categorias;
 	int index_categoria = 0;
+	private JTextField txt_quantidade_pop_prod;
 	
 	public void CarregaCategorias(Label lbl_categoria) {
 		try {
@@ -496,6 +735,8 @@ public class WassabiHome extends JFrame {
 		}
 	}
 	
+	
+	
 		 public String buscarCep(String cep) 
 		    {
 		        String json;        
@@ -540,6 +781,14 @@ public class WassabiHome extends JFrame {
 	
 	public void normalizar(JPanel jp1,JPanel jp2) {
 		jp1.setVisible(false);
+		
+	}
+	
+	public void normalizarInicial(JPanel jp_pop_produtos,JLabel txt_date_global,JLabel txt_venda_global) throws HeadlessException, SQLException {
+		jp_pop_produtos.setVisible(false);
+		txt_date_global.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")).toString());
+		txt_venda_global.setText(String.valueOf(WassabiDAO.IdUltimaVenda()));
+		
 	}
 	
 	public void limpar_cliente(JTextPane jt1,JTextPane jt2,JTextPane jt3,JTextPane jt4,JTextPane jt5) {
@@ -550,13 +799,15 @@ public class WassabiHome extends JFrame {
 		jt5.setText("");
 	}
 	
+	List<Produtos> produtos_selecionados;
 	public void CarregaTabelaProdutos() throws SQLException{
 		DefaultTableModel modelo = (DefaultTableModel) tabela_produtos.getModel();
 		modelo.setNumRows(0);
 		WassabiDAO.conectar();
-		var resultado = WassabiDAO.ConsultarProdutosPorCategoria(index_categoria);
+		produtos_selecionados = null;
+		produtos_selecionados = WassabiDAO.ConsultarProdutosPorCategoria(index_categoria);
 		
-		for (Produtos produtos : resultado) {
+		for (Produtos produtos : produtos_selecionados) {
 			modelo.addRow(new Object[] {
 				produtos.nome()
 			});

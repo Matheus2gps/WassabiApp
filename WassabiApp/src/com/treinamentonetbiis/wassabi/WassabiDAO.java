@@ -76,5 +76,30 @@ public final class WassabiDAO extends AcessoBD{
 		return produto;
 	}
 	
+	public static int IdUltimaVenda() throws SQLException
+	/********************************************************/
+	{
+		String sql = "select count(idVenda) from vendas";
+		Statement statement = conexao.createStatement();
+		ResultSet rs = statement.executeQuery(sql);
+		
+		while (rs.next()) {
+			if (rs.getInt(1) == 0) {
+				return 1;
+			}else {		
+
+				String sql2 = "select idVenda from vendas order by idVenda desc limit 1";
+				Statement statement2 = conexao.createStatement();
+				ResultSet rs2 = statement.executeQuery(sql2);
+				while (rs2.next()) {
+					return rs2.getInt(1)+1;
+				}
+				//return 0;
+			}
+		}
+		return 0;
+		
+	}
+	
 	
 }
